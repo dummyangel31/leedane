@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北越河內下龍灣精彩 5 日</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Noto Sans TC + Varela Round (圓體) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Varela+Round&display=swap" rel="stylesheet">
+    <!-- Pacifico Font for decorative text -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tiffany: {
+                            main: '#4ECDC4',      /* 主色調：蒂芬妮綠 */
+                            dark: '#29A098',      /* 深色：用於文字 */
+                            light: '#C7F3F0',     /* 淺色點綴 */
+                            bg: '#F0FDFA',        /* 極淺綠背景 */
+                            cream: '#FFFDF7',     /* 卡片奶油白 */
+                            accent: '#FF6B6B'     /* 珊瑚紅 (對比色) */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                        round: ['Varela Round', 'sans-serif'],
+                        hand: ['Pacifico', 'cursive'],
+                    },
+                    animation: {
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'sail': 'sail 25s linear infinite', /* 渡輪航行時間 */
+                        'waves': 'waves 10s linear infinite', /* 海浪移動 */
+                    },
+                    keyframes: {
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        sail: {
+                            '0%': { transform: 'translateX(-150px) rotate(1deg)' },
+                            '50%': { transform: 'translateX(50vw) rotate(-1deg)' },
+                            '100%': { transform: 'translateX(110vw) rotate(1deg)' },
+                        },
+                        waves: {
+                            '0%': { backgroundPosition: '0 0' },
+                            '100%': { backgroundPosition: '60px 0' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #E0F7FA; 
+            font-family: 'Noto Sans TC', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 動態海浪背景 */
+        .wave-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='30' viewBox='0 0 60 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 15 Q 15 28, 30 15 T 60 15' fill='none' stroke='%234ECDC4' stroke-width='2' stroke-opacity='0.2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-size: 60px 40px;
+            animation: waves 8s linear infinite;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .tab-active {
+            background-color: #4ECDC4;
+            color: white;
+            font-weight: 700;
+            box-shadow: 4px 4px 0px #29A098;
+            transform: translate(-2px, -2px);
+        }
+        
+        .tab-inactive {
+            background-color: white;
+            color: #4ECDC4;
+            border: 2px solid #4ECDC4;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 50px;
+            bottom: -20px;
+            width: 4px;
+            background-image: linear-gradient(to bottom, #4ECDC4 50%, transparent 50%);
+            background-size: 4px 15px;
+            z-index: 0;
+        }
+
+        .card-enter {
+            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .uke-swing {
+            animation: uke-swing 2s ease-in-out infinite;
+            transform-origin: center bottom;
+        }
+        @keyframes uke-swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .music-note {
+            position: absolute;
+            opacity: 0;
+            animation: floatNote 4s linear infinite;
+            color: #4ECDC4;
+        }
+        @keyframes floatNote {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-50px) rotate(20deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="text-gray-600 pb-20">
+
+    <!-- 動態背景層 -->
+    <div class="wave-bg"></div>
+
+    <!-- 渡輪動畫層 (固定在底部背景) -->
+    <div class="fixed bottom-0 left-0 w-full h-48 pointer-events-none z-[-1] overflow-hidden opacity-80">
+        <!-- 渡輪 -->
+        <div class="absolute bottom-5 animate-sail w-32 h-auto drop-shadow-lg">
+            <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+                <!-- 船身 -->
+                <path d="M10 50 Q 5 65, 20 70 L 100 70 Q 115 65, 110 50 Z" fill="#FF6B6B" stroke="#E53E3E" stroke-width="2" />
+                <!-- 白色船艙 -->
+                <rect x="25" y="30" width="70" height="20" rx="2" fill="#FFFDF7" stroke="#CBD5E0" stroke-width="2" />
+                <rect x="35" y="15" width="40" height="15" rx="2" fill="#FFFDF7" stroke="#CBD5E0" stroke-width="2" />
+                <!-- 煙囪 -->
+                <rect x="50" y="5" width="12" height="15" fill="#F6E05E" stroke="#D69E2E" stroke-width="2" />
+                <path d="M50 5 L62 5" stroke="#D69E2E" stroke-width="2" />
+                <!-- 煙霧 -->
+                <circle cx="58" cy="0" r="3" fill="#FFF" opacity="0.6">
+                    <animate attributeName="cy" from="0" to="-20" dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="54" cy="-5" r="2" fill="#FFF" opacity="0.6">
+                    <animate attributeName="cy" from="-5" to="-25" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" from="0.6" to="0" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                </circle>
+                <!-- 窗戶 -->
+                <circle cx="35" cy="40" r="4" fill="#4ECDC4" />
+                <circle cx="50" cy="40" r="4" fill="#4ECDC4" />
+                <circle cx="65" cy="40" r="4" fill="#4ECDC4" />
+                <circle cx="80" cy="40" r="4" fill="#4ECDC4" />
+                <!-- 裝飾線 -->
+                <line x1="15" y1="58" x2="105" y2="58" stroke="white" stroke-width="2" stroke-dasharray="5,3" />
+            </svg>
+        </div>
+        <!-- 前景浪花 (淡淡的) -->
+        <div class="absolute bottom-0 w-[200%] h-12 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PHBhdGggZD0iTTAgMGw1MCAxMGM1MCAxMCA1MCAyMCAxMDAgMjBzNTAtMTAgNTAtMjAgNTAtMTAgMTAwLTEwVjEwMEgwVjB6IiBmaWxsPSIjNUVENEM1IiBmaWxsLW9wYWNpdHk9IjAuMiIvPjwvc3ZnPg==')] animate-waves" style="background-size: 50% 100%; animation-duration: 20s;"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="bg-tiffany-main text-white sticky top-0 z-50 shadow-lg rounded-b-[2rem]">
+        <!-- 裝飾：飄動的音符 -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <i class="fa-solid fa-music music-note text-white/40 text-xl" style="left: 10%; animation-delay: 0s;"></i>
+            <i class="fa-solid fa-music music-note text-white/40 text-lg" style="left: 80%; animation-delay: 1.5s;"></i>
+            <i class="fa-solid fa-music music-note text-white/40 text-2xl" style="left: 50%; animation-delay: 2.5s;"></i>
+        </div>
+
+        <div class="container mx-auto px-4 py-5 relative z-10">
+            <div class="flex justify-between items-end mb-4">
+                <div class="flex items-center gap-3">
+                    <!-- SVG Ukulele Icon -->
+                    <div class="w-14 h-14 relative uke-swing drop-shadow-md">
+                        <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Body -->
+                            <path d="M50 190 C20 190 10 160 10 145 C10 130 25 120 35 115 C28 110 25 100 25 90 C25 70 40 60 50 60 C60 60 75 70 75 90 C75 100 72 110 65 115 C75 120 90 130 90 145 C90 160 80 190 50 190 Z" fill="#F4A261" stroke="#E76F51" stroke-width="3"/>
+                            <!-- Neck -->
+                            <rect x="42" y="10" width="16" height="60" fill="#E9C46A" stroke="#E76F51" stroke-width="2"/>
+                            <!-- Head -->
+                            <rect x="38" y="0" width="24" height="25" rx="5" fill="#F4A261" stroke="#E76F51" stroke-width="2"/>
+                            <!-- Sound Hole -->
+                            <circle cx="50" cy="135" r="12" fill="#2A9D8F"/>
+                            <!-- Bridge -->
+                            <rect x="35" y="165" width="30" height="8" rx="2" fill="#264653"/>
+                            <!-- Strings -->
+                            <line x1="45" y1="10" x2="45" y2="165" stroke="#FFF" stroke-width="1"/>
+                            <line x1="48" y1="10" x2="48" y2="165" stroke="#FFF" stroke-width="1"/>
+                            <line x1="52" y1="10" x2="52" y2="165" stroke="#FFF" stroke-width="1"/>
+                            <line x1="55" y1="10" x2="55" y2="165" stroke="#FFF" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold tracking-wider font-round text-white drop-shadow-sm">北越歡樂 5 日</h1>
+                        <p class="text-xs text-tiffany-bg opacity-90">HAN05BR26208T01</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Date Navigation -->
+            <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-2 px-1" id="dateTabs">
+                <!-- Tabs will be injected by JS -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-md relative min-h-screen">
+        
+        <!-- Tab Contents -->
+        <div id="itineraryContainer">
+            <!-- Content will be injected by JS -->
+        </div>
+
+    </main>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // 行程資料 (不變)
+        const itineraryData = [
+            {
+                date: "2月8日",
+                dayOfWeek: "週日",
+                title: "出發！河內大冒險",
+                headerIcon: "fa-plane-up",
+                events: [
+                    { time: "07:30", icon: "fa-passport", title: "桃園機場集合", desc: "準備好護照與好心情，我們出發囉！", location: "TPE 桃園", color: "bg-blue-400" },
+                    { time: "10:30", icon: "fa-location-dot", title: "Hello 河內！", desc: "抵達越南，導遊熱情接機。", location: "HAN 機場", color: "bg-green-400" },
+                    { time: "12:00", icon: "fa-bowl-food", title: "午餐：超好吃河粉", desc: "來越南一定要吃的 Pho 和炸春捲。", location: "河內市區", color: "bg-orange-400" },
+                    { time: "14:00", icon: "fa-camera-retro", title: "市區名勝巡禮", desc: "巴亭廣場、一柱廟，感受歷史氛圍。", location: "巴亭廣場", color: "bg-teal-400" },
+                    { time: "16:00", icon: "fa-bed", title: "飯店 Check-in", desc: "入住超棒的五星級酒店休息一下。", location: "Grand Plaza", color: "bg-indigo-400" },
+                    { time: "18:00", icon: "fa-utensils", title: "晚餐：豐富自助餐", desc: "異國料理吃到飽，大滿足！", location: "Sen Tay Ho", color: "bg-red-400" }
+                ]
+            },
+            {
+                date: "2月9日",
+                dayOfWeek: "週一",
+                title: "下龍灣海上派對",
+                headerIcon: "fa-anchor",
+                events: [
+                    { time: "08:00", icon: "fa-bus-simple", title: "前往下龍灣", desc: "沿途欣賞風景，前進世界遺產。", location: "移動中", color: "bg-blue-400" },
+                    { time: "11:30", icon: "fa-ship", title: "登船！海上桂林", desc: "坐上豪華遊船，被美景包圍。", location: "下龍灣", color: "bg-tiffany-dark" },
+                    { time: "12:00", icon: "fa-fish", title: "海鮮大餐", desc: "在船上一邊吃海鮮，一邊看風景。", location: "船上餐廳", color: "bg-orange-400" },
+                    { time: "14:00", icon: "fa-person-hiking", title: "驚訝洞探險", desc: "超巨大的鐘乳石洞，還要去英雄島看全景。", location: "Ti Top Island", color: "bg-green-500" },
+                    { time: "18:30", icon: "fa-wine-glass", title: "晚餐時光", desc: "享用美味的中式合菜。", location: "下龍灣", color: "bg-red-400" },
+                    { time: "20:00", icon: "fa-spa", title: "自由活動", desc: "可以去按摩放鬆，或逛逛當地夜市。", location: "飯店週邊", color: "bg-purple-400" }
+                ]
+            },
+            {
+                date: "2月10日",
+                dayOfWeek: "週二",
+                title: "陸龍灣划船趣",
+                headerIcon: "fa-tree",
+                events: [
+                    { time: "08:00", icon: "fa-car", title: "前往陸龍灣", desc: "出發去寧平，看陸地上的下龍灣。", location: "寧平省", color: "bg-green-600" },
+                    { time: "10:30", icon: "fa-gopuram", title: "碧洞古廟", desc: "古色古香的山中廟宇。", location: "碧洞", color: "bg-yellow-600" },
+                    { time: "12:00", icon: "fa-drumstick-bite", title: "午餐：羊肉風味", desc: "寧平特產羊肉料理，沒腥味很好吃！", location: "寧平", color: "bg-orange-500" },
+                    { time: "13:30", icon: "fa-rowing", title: "小舟遊長安", desc: "搭手搖船穿過山洞，風景超級美！", location: "長安生態區", color: "bg-cyan-500" },
+                    { time: "16:30", icon: "fa-rotate-left", title: "返回河內", desc: "帶著美照回市區囉。", location: "回程", color: "bg-gray-400" },
+                    { time: "18:30", icon: "fa-bowl-rice", title: "晚餐：家常菜", desc: "體驗道地的越式家庭料理。", location: "河內古街", color: "bg-red-400" }
+                ]
+            },
+            {
+                date: "2月11日",
+                dayOfWeek: "週三",
+                title: "古街漫遊 & 下午茶",
+                headerIcon: "fa-mug-hot",
+                events: [
+                    { time: "09:00", icon: "fa-scroll", title: "文廟國子監", desc: "越南孔廟，求學業進步必來！", location: "文廟", color: "bg-red-600" },
+                    { time: "10:30", icon: "fa-water", title: "還劍湖散步", desc: "聽聽神龜傳說，逛逛玉山祠。", location: "還劍湖", color: "bg-blue-500" },
+                    { time: "12:00", icon: "fa-cheese", title: "法式午餐", desc: "享受浪漫的法式料理氛圍。", location: "老城區", color: "bg-yellow-500" },
+                    { time: "14:00", icon: "fa-cart-shopping", title: "電瓶車遊古街", desc: "不用走路，輕鬆逛 36 古街買買買。", location: "36古街", color: "bg-green-500" },
+                    { time: "15:30", icon: "fa-coffee", title: "網美下午茶", desc: "法式麵包配上濃郁的雞蛋咖啡。", location: "打卡熱點", color: "bg-amber-700" },
+                    { time: "17:00", icon: "fa-masks-theater", title: "水上木偶戲", desc: "在水上表演的有趣木偶戲。", location: "昇龍劇院", color: "bg-indigo-500" },
+                    { time: "19:00", icon: "fa-shrimp", title: "龍蝦火鍋！", desc: "晚餐吃好一點，海鮮火鍋大餐。", location: "河內", color: "bg-red-500" }
+                ]
+            },
+            {
+                date: "2月12日",
+                dayOfWeek: "週四",
+                title: "滿載回憶回家去",
+                headerIcon: "fa-gift",
+                events: [
+                    { time: "09:00", icon: "fa-bag-shopping", title: "樂天商場 Shopping", desc: "最後衝刺！買伴手禮、逛超市。", location: "Lotte Center", color: "bg-pink-500" },
+                    { time: "11:30", icon: "fa-burger", title: "午餐自理", desc: "想吃什麼自己挑，方便逛街。", location: "美食街", color: "bg-gray-500" },
+                    { time: "13:30", icon: "fa-suitcase-rolling", title: "前往機場", desc: "依依不捨，準備回家。", location: "往機場", color: "bg-blue-400" },
+                    { time: "16:00", icon: "fa-plane-departure", title: "飛往台灣", desc: "在飛機上整理照片，回味這幾天。", location: "HAN -> TPE", color: "bg-tiffany-dark" },
+                    { time: "20:00", icon: "fa-house-chimney", title: "甜蜜的家", desc: "平安抵達，下次再去旅行吧！", location: "Home", color: "bg-green-500" }
+                ]
+            }
+        ];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTabs();
+            renderContent(0);
+        });
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('dateTabs');
+            tabsContainer.innerHTML = '';
+
+            itineraryData.forEach((day, index) => {
+                const btn = document.createElement('button');
+                btn.className = `flex-shrink-0 px-4 py-2 rounded-xl text-sm transition-all duration-300 whitespace-nowrap border-2 ${index === 0 ? 'tab-active border-tiffany-dark' : 'tab-inactive'}`;
+                btn.innerHTML = `
+                    <div class="font-bold text-base font-round">${day.date}</div>
+                    <div class="text-xs mt-0.5">${day.dayOfWeek}</div>
+                `;
+                btn.onclick = () => {
+                    setActiveTab(index);
+                    renderContent(index);
+                };
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function setActiveTab(activeIndex) {
+            const buttons = document.getElementById('dateTabs').children;
+            Array.from(buttons).forEach((btn, index) => {
+                if (index === activeIndex) {
+                    btn.className = 'flex-shrink-0 px-4 py-2 rounded-xl text-sm transition-all duration-300 whitespace-nowrap border-2 tab-active border-tiffany-dark';
+                } else {
+                    btn.className = 'flex-shrink-0 px-4 py-2 rounded-xl text-sm transition-all duration-300 whitespace-nowrap border-2 tab-inactive hover:bg-tiffany-light';
+                }
+            });
+            
+            buttons[activeIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+
+        function renderContent(index) {
+            const container = document.getElementById('itineraryContainer');
+            const data = itineraryData[index];
+            
+            container.innerHTML = '';
+
+            // Day Title
+            const dayHeader = document.createElement('div');
+            dayHeader.className = 'mb-8 text-center card-enter relative';
+            dayHeader.innerHTML = `
+                <div class="inline-block relative p-4">
+                    <!-- 背景裝飾圓 -->
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white rounded-full shadow-inner -z-10 border-4 border-dashed border-tiffany-light"></div>
+                    
+                    <i class="fa-solid ${data.headerIcon} text-5xl text-tiffany-main mb-2 animate-float"></i>
+                    <h2 class="text-3xl font-bold text-gray-700 mb-1 font-round">${data.date}</h2>
+                    <p class="text-tiffany-dark font-medium bg-white px-3 py-1 rounded-full shadow-sm inline-block transform -rotate-2 border border-tiffany-light">${data.title}</p>
+                </div>
+            `;
+            container.appendChild(dayHeader);
+
+            // Timeline Container
+            const timelineDiv = document.createElement('div');
+            timelineDiv.className = 'relative pl-2 pb-10';
+            
+            const line = document.createElement('div');
+            line.className = 'timeline-line';
+            timelineDiv.appendChild(line);
+
+            // Events Cards
+            data.events.forEach((event, idx) => {
+                const eventCard = document.createElement('div');
+                eventCard.className = 'relative flex items-start mb-8 card-enter group';
+                eventCard.style.animationDelay = `${idx * 0.1}s`;
+
+                eventCard.innerHTML = `
+                    <!-- Icon Bubble -->
+                    <div class="z-10 flex-shrink-0 w-12 h-12 rounded-full ${event.color} border-4 border-white flex items-center justify-center text-white shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                        <i class="fa-solid ${event.icon} text-lg"></i>
+                    </div>
+                    
+                    <!-- Card Content -->
+                    <div class="ml-4 flex-grow bg-tiffany-cream p-5 rounded-2xl shadow-[4px_4px_0px_rgba(200,200,200,0.2)] border-2 border-white relative overflow-hidden transition-all duration-300 hover:shadow-[6px_6px_0px_#4ECDC4] hover:-translate-y-1 group-hover:border-tiffany-main">
+                        
+                        <!-- 裝飾角標 -->
+                        <div class="absolute -right-4 -top-4 w-12 h-12 bg-tiffany-light rounded-full opacity-50"></div>
+
+                        <!-- Time Badge -->
+                        <div class="absolute top-3 right-3 bg-white text-tiffany-dark text-xs font-bold px-2 py-1 rounded-lg border border-tiffany-light shadow-sm">
+                            ${event.time}
+                        </div>
+                        
+                        <h3 class="text-lg font-bold text-gray-700 mt-1 relative z-10 font-round">${event.title}</h3>
+                        <p class="text-sm text-gray-500 mt-2 leading-relaxed relative z-10">${event.desc}</p>
+                        
+                        <div class="mt-3 inline-flex items-center text-xs text-white ${event.color} px-2 py-1 rounded-md shadow-sm">
+                            <i class="fa-solid fa-location-dot mr-1"></i>
+                            ${event.location}
+                        </div>
+                    </div>
+                `;
+                timelineDiv.appendChild(eventCard);
+            });
+
+            container.appendChild(timelineDiv);
+            
+            // End of day marker (Cute)
+            const endMarker = document.createElement('div');
+            endMarker.className = 'text-center text-tiffany-main card-enter';
+            endMarker.style.animationDelay = '0.8s';
+            endMarker.innerHTML = `
+                <div class="inline-block p-2 rounded-full bg-white shadow-md">
+                    <i class="fa-solid fa-star text-2xl text-yellow-400 animate-spin" style="animation-duration: 3s;"></i>
+                </div>
+                <p class="text-sm mt-2 font-hand font-bold tracking-widest text-tiffany-dark">Good Night</p>
+            `;
+            container.appendChild(endMarker);
+        }
+    </script>
+</body>
+</html>
